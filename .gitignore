@@ -1,3 +1,4 @@
-first_django/migrations
-first_django/__pycache__
+django_graphql/migrations
+django_graphql/__pycache__
 db.sqlite3
+*.zip
