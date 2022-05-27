@@ -2,6 +2,7 @@ from email.policy import default
 import graphene
 from graphene_django import DjangoObjectType
 from django.db import models
+from graphql import GraphQLError
 
 class Category(models.Model):
     title = models.CharField(max_length=255)
@@ -15,6 +16,7 @@ class CategoryType(DjangoObjectType):
      class Meta: 
         model = Category
         fields = ('id','title')
+
 
 class Query(graphene.ObjectType):
     categories = graphene.List(
@@ -71,14 +73,13 @@ class CreateCategory(graphene.Mutation):
 
     @classmethod
     def mutate(cls, root, info, title="eeeeeeee"):
+        if Category.objects.filter(title=title).exists():
+            raise GraphQLError("Category Title Exists")
         category = Category()
         category.title = title
         category.save()
         return CreateCategory(category=category)
     
-    def validate(self, fields):
-        title = fields.get('title', None)
-        raise graphene.FieldError('fields are the same value')
 
 
 class Mutation(graphene.ObjectType):
