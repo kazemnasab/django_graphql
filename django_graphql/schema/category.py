@@ -1,7 +1,15 @@
 from email.policy import default
 import graphene
 from graphene_django import DjangoObjectType
-from ..models import Category, Book, Grocery
+from django.db import models
+
+class Category(models.Model):
+    title = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+    def __str__(self):
+        return self.title
 
 class CategoryType(DjangoObjectType):
      class Meta: 
@@ -67,7 +75,12 @@ class CreateCategory(graphene.Mutation):
         category.title = title
         category.save()
         return CreateCategory(category=category)
+    
+    def validate(self, fields):
+        title = fields.get('title', None)
+        raise graphene.FieldError('fields are the same value')
+
 
 class Mutation(graphene.ObjectType):
-    update_category1 = UpdateCategory.Field()
-    create_category1 = CreateCategory.Field()
+    update_category = UpdateCategory.Field()
+    create_category= CreateCategory.Field()

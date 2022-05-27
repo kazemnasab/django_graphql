@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Category, Book, Grocery
+from .schema.category import Category
+from .schema.book import Book
+from .schema.grocery import Grocery
 
 # Register your models here.
 

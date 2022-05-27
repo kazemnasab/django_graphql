@@ -1,6 +1,24 @@
 import graphene
 from graphene_django import DjangoObjectType
-from ..models import Category, Book, Grocery
+from django.db import models
+
+
+class Book(models.Model):
+    title = models.CharField(max_length=150)
+    author = models.CharField(max_length=100, default='John Doe')
+    isbn = models.CharField(max_length=13)
+    pages = models.IntegerField()
+    price = models.IntegerField()
+    quantity = models.IntegerField()
+    description = models.TextField()
+    status = models.BooleanField()
+    date_created = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_created']
+
+    def __str__(self):
+        return self.title
 
 
 class BookType(DjangoObjectType):
@@ -20,23 +38,9 @@ class BookType(DjangoObjectType):
             'date_created',
         )  
 
-class GroceryType(DjangoObjectType):
-    class Meta:
-        model = Grocery
-        fields = (
-            'product_tag',
-            'name',
-            'category',
-            'price',
-            'quantity',
-            'imageurl',
-            'status',
-            'date_created',
-        )
 
 class Query(graphene.ObjectType):
     books = graphene.List(BookType)
-    groceries = graphene.List(GroceryType)
 
     def resolve_books(root, info, **kwargs):
         # Querying a list

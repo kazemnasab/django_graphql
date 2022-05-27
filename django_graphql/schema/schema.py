@@ -3,10 +3,10 @@ from turtle import title
 from unicodedata import category
 import graphene
 from graphene_django import DjangoObjectType
-from ..models import Category, Book, Grocery
 from graphene import ObjectType, String, Int, List
 from .category import Mutation as CategoryMutation, Query as CategoryQuery
 from .book import Mutation as BookMutation, Query as BookQuery
+from django.db import models
 
   
 
